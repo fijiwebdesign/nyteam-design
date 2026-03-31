@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NY Team Design — Editorial Precision for NYC Tech</title>
+<meta name="description" content="NY Team is a design studio in New York City specializing in web, graphic, font, and print design for fintech, DTC, media, and healthtech companies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --blue: #1a2b5f;
+  --gold: #c8a45c;
+  --gray-100: #f5f5f3;
+  --gray-200: #e8e8e4;
+  --gray-400: #999;
+  --gray-600: #666;
+  --gray-800: #222;
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --container: 1280px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button, input, textarea, select { font: inherit; }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+
+/* Scroll-triggered reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 0;
+  transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+}
+.nav.scrolled {
+  background: rgba(0, 0, 0, 0.95);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+  padding: 0.75rem 0;
+}
+.nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: none;
+  list-style: none;
+  gap: 2rem;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-cta {
+  display: none;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--white);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  background: none;
+}
+.nav-cta:hover {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+}
+
+/* Mobile menu toggle */
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--white);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.nav-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.97);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.mobile-menu.active { display: flex; }
+.mobile-menu a {
+  font-family: var(--serif);
+  font-size: 2rem;
+  color: var(--white);
+  transition: color 0.3s ease;
+}
+.mobile-menu a:hover { color: var(--gold); }
+
+@media (min-width: 768px) {
+  .nav-links { display: flex; }
+  .nav-cta { display: inline-block; }
+  .nav-toggle { display: none; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--black);
+  color: var(--white);
+  overflow: hidden;
+}
+
+/* Geometric background pattern */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, transparent 40%, rgba(26,43,95,0.08) 40%, rgba(26,43,95,0.08) 41%, transparent 41%),
+    linear-gradient(-45deg, transparent 60%, rgba(200,164,92,0.05) 60%, rgba(200,164,92,0.05) 61%, transparent 61%);
+  pointer-events: none;
+}
+
+/* SVG grid lines */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.hero-grid line { stroke: var(--white); stroke-width: 0.5; }
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(3.5rem, 10vw, 9rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-tagline {
+  font-family: var(--serif);
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255,255,255,0.6);
+  max-width: 480px;
+  line-height: 1.5;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--white);
+  color: var(--black);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  animation: fadeUp 1s 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-cta:hover {
+  background: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* Vertical scroll indicator */
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* ============================================================
+   SECTION SHARED
+   ============================================================ */
+section { padding: clamp(4rem, 8vw, 8rem) 0; }
+
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 1rem;
+}
+
+.section-heading {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.section-rule {
+  width: 48px;
+  height: 1px;
+  background: var(--black);
+  margin-bottom: 2rem;
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.services { background: var(--gray-100); }
+
+.services-intro {
+  max-width: 640px;
+  margin-bottom: 4rem;
+}
+.services-intro p {
+  font-size: 1.0625rem;
+  color: var(--gray-600);
+  line-height: 1.7;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: var(--white);
+  padding: clamp(2rem, 3vw, 2.75rem);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  border: 1px solid var(--gray-200);
+}
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.06);
+}
+
+.service-card-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.service-card-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.service-card h3 {
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.service-card p {
+  font-size: 0.9375rem;
+  color: var(--gray-600);
+  line-height: 1.65;
+}
+
+/* Font Design special treatment */
+.service-card--font {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  grid-column: 1 / -1;
+}
+.service-card--font p { color: rgba(255,255,255,0.6); }
+.service-card--font .service-card-icon svg { stroke: var(--gold); }
+
+.type-specimen {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.type-specimen-label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 1rem;
+}
+.type-specimen-display {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.type-specimen-display em {
+  font-style: italic;
+  color: var(--gold);
+}
+.type-specimen-chars {
+  margin-top: 1.5rem;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.15em;
+  word-spacing: 0.4em;
+  line-height: 2;
+}
+
+@media (min-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .service-card--font {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .service-card--font .type-specimen {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 3rem;
+  }
+}
+
+/* ============================================================
+   WORK / PORTFOLIO
+   ============================================================ */
+.work { background: var(--white); }
+
+.work-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.work-card {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--gray-800);
+}
+
+/* Geometric patterns for each card */
+.work-card-pattern {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.work-card:hover .work-card-pattern { transform: scale(1.05); }
+
+.work-card-pattern svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.15;
+}
+
+.work-card--1 { background: #0d1117; }
+.work-card--2 { background: var(--blue); }
+.work-card--3 { background: #1c1c1c; }
+.work-card--4 { background: #0f1922; }
+.work-card--5 { background: #2a1f0e; }
+.work-card--6 { background: #111; }
+
+.work-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  transition: background 0.4s ease;
+}
+.work-card:hover .work-card-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+.work-card-label {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid rgba(200,164,92,0.3);
+  width: fit-content;
+}
+
+.work-card h3 {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 0.375rem;
+}
+
+.work-card-desc {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.5);
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.work-card:hover .work-card-desc {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.work-card-arrow {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translate(-8px, 8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.work-card:hover .work-card-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+.work-card-arrow svg { width: 16px; height: 16px; stroke: var(--white); }
+
+@media (min-width: 640px) {
+  .work-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .work-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about {
+  background: var(--black);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle geometric accents */
+.about::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(200,164,92,0.06);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.about .section-label { color: var(--gold); }
+.about .section-rule { background: rgba(255,255,255,0.15); }
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.about-manifesto {
+  max-width: 600px;
+}
+.about-manifesto p {
+  font-family: var(--serif);
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-style: italic;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 1.5rem;
+}
+.about-manifesto p:first-of-type {
+  font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+  color: var(--white);
+}
+
+.about-details { display: flex; flex-direction: column; gap: 2.5rem; }
+
+.about-stat {
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--gold);
+}
+.about-stat-number {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.about-stat-label {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.about-neighborhoods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.about-neighborhoods span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+}
+
+@media (min-width: 768px) {
+  .about-content {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact { background: var(--gray-100); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.contact-info h3 {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+.contact-info p {
+  font-size: 1rem;
+  color: var(--gray-600);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.contact-email {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--blue);
+  border-bottom: 1px solid var(--blue);
+  padding-bottom: 2px;
+  transition: color 0.3s ease;
+}
+.contact-email:hover { color: var(--gold); border-color: var(--gold); }
+
+.contact-location {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--gray-200);
+}
+.contact-location p {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 0.25rem;
+}
+.contact-location span {
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  color: var(--black);
+}
+
+.contact-qualifier {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  font-style: italic;
+}
+
+/* Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  font-size: 0.9375rem;
+  color: var(--black);
+  transition: border-color 0.3s ease;
+  appearance: none;
+  border-radius: 0;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--black);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.form-submit {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  width: fit-content;
+}
+.form-submit:hover {
+  background: var(--blue);
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .contact-grid { grid-template-columns: 5fr 7fr; gap: 4rem; }
+  .form-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--black);
+  color: var(--white);
+  padding: clamp(3rem, 6vw, 5rem) 0 2rem;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-lockup {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.footer-lockup span { color: var(--gold); }
+
+.footer-links-group h4 {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 1rem;
+}
+.footer-links-group ul { list-style: none; }
+.footer-links-group li { margin-bottom: 0.625rem; }
+.footer-links-group a {
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.3s ease;
+}
+.footer-links-group a:hover { color: var(--white); }
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 2rem;
+}
+
+.footer-copyright {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.footer-social {
+  display: flex;
+  gap: 1.25rem;
+}
+.footer-social a {
+  color: rgba(255,255,255,0.3);
+  transition: color 0.3s ease;
+}
+.footer-social a:hover { color: var(--gold); }
+.footer-social svg { width: 18px; height: 18px; }
+
+@media (min-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr auto auto;
+    gap: 4rem;
+    align-items: start;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">NY Team</a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Start a Project</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services">Services</a>
+  <a href="#work">Work</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <!-- Grid lines SVG -->
+  <svg class="hero-grid" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
+    <line x1="25%" y1="0" x2="25%" y2="100%" />
+    <line x1="50%" y1="0" x2="50%" y2="100%" />
+    <line x1="75%" y1="0" x2="75%" y2="100%" />
+    <line x1="0" y1="33%" x2="100%" y2="33%" />
+    <line x1="0" y1="66%" x2="100%" y2="66%" />
+  </svg>
+
+  <div class="container">
+    <p class="hero-eyebrow">Design Studio &mdash; New York City</p>
+    <h1 class="hero-title">NY <em>Team</em></h1>
+    <p class="hero-tagline">Editorial precision for NYC tech. We design brands, websites, and typefaces for companies shaping finance, media, and culture.</p>
+    <a href="#work" class="hero-cta">See Our Work</a>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES
+     ============================================================ -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-intro reveal">
+      <p class="section-label">Services</p>
+      <h2 class="section-heading">Four disciplines,<br>one editorial standard.</h2>
+      <div class="section-rule"></div>
+      <p>Every project we take on &mdash; whether a full brand system or a single typeface &mdash; is held to the same standard: clarity, craft, and cultural fluency.</p>
+    </div>
+
+    <div class="services-grid">
+      <!-- Web Design -->
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-card-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#1a2b5f" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="40" height="28" rx="2" />
+            <line x1="4" y1="16" x2="44" y2="16" />
+            <line x1="24" y1="36" x2="24" y2="44" />
+            <line x1="16" y1="44" x2="32" y2="44" />
+          </svg>
+        </div>
+        <h3>Web Design</h3>
+        <p>Bespoke websites and digital products with editorial clarity. Fast, responsive, and designed to convert the audiences that matter.</p>
+      </div>
+
+      <!-- Graphic Design -->
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-card-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#1a2b5f" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="36" height="36" rx="2" />
+            <circle cx="24" cy="24" r="10" />
+            <line x1="6" y1="24" x2="14" y2="24" />
+            <line x1="34" y1="24" x2="42" y2="24" />
+            <line x1="24" y1="6" x2="24" y2="14" />
+            <line x1="24" y1="34" x2="24" y2="42" />
+          </svg>
+        </div>
+        <h3>Graphic Design</h3>
+        <p>Brand identities, pitch decks, and visual systems that speak with authority. Built for boardrooms, not mood boards.</p>
+      </div>
+
+      <!-- Print Design -->
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-card-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#1a2b5f" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 36V42H36V36" />
+            <path d="M12 12V6H36V12" />
+            <rect x="4" y="12" width="40" height="24" rx="2" />
+            <rect x="14" y="28" width="20" height="10" />
+            <circle cx="38" cy="18" r="2" fill="#1a2b5f" />
+          </svg>
+        </div>
+        <h3>Print Design</h3>
+        <p>Annual reports, packaging, and publication design crafted with production expertise. We know paper, ink, and finishing.</p>
+      </div>
+
+      <!-- Font Design (special) -->
+      <div class="service-card service-card--font reveal reveal-delay-4">
+        <div>
+          <div class="service-card-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="#c8a45c" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 40L20 8H28L40 40" />
+              <line x1="14" y1="28" x2="34" y2="28" />
+              <line x1="4" y1="40" x2="16" y2="40" />
+              <line x1="32" y1="40" x2="44" y2="40" />
+            </svg>
+          </div>
+          <h3>Font Design</h3>
+          <p>Custom typefaces and type systems that give your brand a voice no one else can use. From concept sketches through OpenType production.</p>
+        </div>
+        <div class="type-specimen">
+          <p class="type-specimen-label">Type Specimen Preview</p>
+          <div class="type-specimen-display">
+            Aa Bb <em>Cc</em><br>
+            Hamburgefonstiv
+          </div>
+          <div class="type-specimen-chars">
+            A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+            a b c d e f g h i j k l m 0 1 2 3 4 5 6 7 8 9
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WORK / PORTFOLIO
+     ============================================================ -->
+<section class="work" id="work">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Selected Work</p>
+      <h2 class="section-heading">Case studies in precision.</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="work-grid">
+      <!-- Card 1 -->
+      <div class="work-card work-card--1 reveal reveal-delay-1">
+        <div class="work-card-pattern">
+          <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="160" height="160" /><rect x="40" y="40" width="120" height="120" /><rect x="60" y="60" width="80" height="80" /><rect x="80" y="80" width="40" height="40" />
+          </svg>
+        </div>
+        <div class="work-card-overlay">
+          <span class="work-card-label">Fintech</span>
+          <h3>Meridian Capital</h3>
+          <p class="work-card-desc">Brand identity and web platform for a Series B trading infrastructure company.</p>
+        </div>
+        <div class="work-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="work-card work-card--2 reveal reveal-delay-2">
+        <div class="work-card-pattern">
+          <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" /><circle cx="100" cy="100" r="60" /><circle cx="100" cy="100" r="40" /><circle cx="100" cy="100" r="20" />
+          </svg>
+        </div>
+        <div class="work-card-overlay">
+          <span class="work-card-label">DTC</span>
+          <h3>Volts Coffee</h3>
+          <p class="work-card-desc">Packaging system and e-commerce design for a premium direct-to-consumer coffee brand.</p>
+        </div>
+        <div class="work-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="work-card work-card--3 reveal reveal-delay-3">
+        <div class="work-card-pattern">
+          <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="0" x2="200" y2="200" /><line x1="50" y1="0" x2="200" y2="150" /><line x1="100" y1="0" x2="200" y2="100" /><line x1="150" y1="0" x2="200" y2="50" /><line x1="0" y1="50" x2="150" y2="200" /><line x1="0" y1="100" x2="100" y2="200" /><line x1="0" y1="150" x2="50" y2="200" />
+          </svg>
+        </div>
+        <div class="work-card-overlay">
+          <span class="work-card-label">Media Tech</span>
+          <h3>The Broadsheet</h3>
+          <p class="work-card-desc">Editorial design system and custom typeface for a digital media publication.</p>
+        </div>
+        <div class="work-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="work-card work-card--4 reveal reveal-delay-1">
+        <div class="work-card-pattern">
+          <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" /><polygon points="100,40 160,70 160,130 100,160 40,130 40,70" />
+          </svg>
+        </div>
+        <div class="work-card-overlay">
+          <span class="work-card-label">HealthTech</span>
+          <h3>Clarity Health</h3>
+          <p class="work-card-desc">Patient-facing web app and brand identity for a telehealth platform serving NYC providers.</p>
+        </div>
+        <div class="work-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="work-card work-card--5 reveal reveal-delay-2">
+        <div class="work-card-pattern">
+          <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 100 Q50 0, 100 100 Q150 200, 200 100" /><path d="M0 80 Q50 -20, 100 80 Q150 180, 200 80" /><path d="M0 120 Q50 20, 100 120 Q150 220, 200 120" />
+          </svg>
+        </div>
+        <div class="work-card-overlay">
+          <span class="work-card-label">Fintech</span>
+          <h3>Ledger & Co.</h3>
+          <p class="work-card-desc">Annual report design and data visualization for a Wall Street quantitative fund.</p>
+        </div>
+        <div class="work-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="work-card work-card--6 reveal reveal-delay-3">
+        <div class="work-card-pattern">
+          <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="80" height="80" /><rect x="110" y="10" width="80" height="80" /><rect x="10" y="110" width="80" height="80" /><rect x="110" y="110" width="80" height="80" /><line x1="100" y1="0" x2="100" y2="200" /><line x1="0" y1="100" x2="200" y2="100" />
+          </svg>
+        </div>
+        <div class="work-card-overlay">
+          <span class="work-card-label">DTC</span>
+          <h3>Atelier Noire</h3>
+          <p class="work-card-desc">Full brand system and Shopify build for a luxury accessories label based in SoHo.</p>
+        </div>
+        <div class="work-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">About the Studio</p>
+      <h2 class="section-heading" style="color: var(--white);">Built in New York,<br>for New York.</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="about-content">
+      <div class="about-manifesto reveal">
+        <p>We started NY Team because the best companies in the city deserve design that matches their ambition.</p>
+        <p>New York runs on two things: finance and media. We speak both languages fluently &mdash; from pitch decks that close Series B rounds to editorial systems that define how millions read the news.</p>
+        <p>Our studio sits at the intersection of Flatiron, SoHo, and Dumbo &mdash; three neighborhoods that shaped our understanding of what design can do for a business that takes itself seriously.</p>
+      </div>
+
+      <div class="about-details reveal reveal-delay-2">
+        <div class="about-stat">
+          <div class="about-stat-number">NYC</div>
+          <div class="about-stat-label">Based &amp; Operating</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-number">4</div>
+          <div class="about-stat-label">Core Disciplines</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-number">A&ndash;C</div>
+          <div class="about-stat-label">Series We Work With</div>
+        </div>
+        <div>
+          <p class="section-label" style="color: rgba(255,255,255,0.3); margin-bottom: 0.75rem;">Neighborhoods</p>
+          <div class="about-neighborhoods">
+            <span>Flatiron</span>
+            <span>SoHo</span>
+            <span>Dumbo</span>
+            <span>Tribeca</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-heading">Start a project.</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3>Let's make something<br>worth talking about.</h3>
+        <p>Whether you're launching a brand, redesigning a product, or commissioning a custom typeface &mdash; we'd like to hear about it.</p>
+        <a href="mailto:hello@nyteam.design" class="contact-email">hello@nyteam.design</a>
+
+        <div class="contact-location">
+          <p>Studio Location</p>
+          <span>Based in New York City</span>
+        </div>
+
+        <p class="contact-qualifier">We work with Series A&ndash;C startups and established companies in fintech, DTC, media, and healthtech.</p>
+      </div>
+
+      <form class="contact-form reveal reveal-delay-2" onsubmit="return false;">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Acme Inc.">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="project-type">Project Type</label>
+            <select id="project-type" name="project-type" required>
+              <option value="" disabled selected>Select a service</option>
+              <option value="web">Web Design</option>
+              <option value="graphic">Graphic Design</option>
+              <option value="font">Font Design</option>
+              <option value="print">Print Design</option>
+              <option value="multi">Multiple Services</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="budget">Budget Range</label>
+            <select id="budget" name="budget">
+              <option value="" disabled selected>Select a range</option>
+              <option value="25-50">$25k &ndash; $50k</option>
+              <option value="50-100">$50k &ndash; $100k</option>
+              <option value="100-250">$100k &ndash; $250k</option>
+              <option value="250+">$250k+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Project Details</label>
+          <textarea id="message" name="message" placeholder="Tell us about your project, timeline, and goals."></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">Send Inquiry</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-lockup">nyteam<span>.</span>design</div>
+      </div>
+      <div class="footer-links-group">
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-group">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:hello@nyteam.design">hello@nyteam.design</a></li>
+          <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2026 NY Team Design. All rights reserved.</p>
+      <div class="footer-social">
+        <!-- Instagram -->
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+          </svg>
+        </a>
+        <!-- LinkedIn -->
+        <a href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="3" />
+            <path d="M8 11v5M8 8v.01M12 16v-5c0-1 .5-2 2-2s2 1 2 2v5" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ============================================================
+     NAV SCROLL BEHAVIOR
+     ============================================================ */
+  const nav = document.getElementById('nav');
+  let lastScroll = 0;
+
+  function onScroll() {
+    const scrollY = window.scrollY;
+    if (scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+    lastScroll = scrollY;
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ============================================================
+     MOBILE MENU
+     ============================================================ */
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  navToggle.addEventListener('click', function() {
+    navToggle.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+
+  // Close mobile menu on link click
+  mobileMenu.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      navToggle.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* ============================================================
+     INTERSECTION OBSERVER — SCROLL REVEALS
+     ============================================================ */
+  const reveals = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    reveals.forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback: show everything
+    reveals.forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+  /* ============================================================
+     SMOOTH SCROLL FOR ANCHOR LINKS (fallback for older browsers)
+     ============================================================ */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
